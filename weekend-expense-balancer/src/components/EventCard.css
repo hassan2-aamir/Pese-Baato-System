@@ -4,7 +4,7 @@
   border-radius: 12px;
   margin-bottom: 1rem;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .event-header {
@@ -185,7 +185,7 @@
 .col-balance {
   text-align: right;
   font-weight: 600;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
 }
 
 .col-balance.positive {
@@ -222,14 +222,14 @@
   }
 
   .entry-row .col-expected::before {
-    content: 'Expected: ';
+    content: "Expected: ";
     font-size: 0.8rem;
     color: #666;
     min-width: 80px;
   }
 
   .entry-row .col-actual::before {
-    content: 'Paid: ';
+    content: "Paid: ";
     font-size: 0.8rem;
     color: #666;
     min-width: 80px;
@@ -242,7 +242,7 @@
   }
 
   .entry-row .col-balance::before {
-    content: 'Balance: ';
+    content: "Balance: ";
     font-size: 0.8rem;
     color: #666;
     font-weight: normal;

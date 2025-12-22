@@ -67,7 +67,7 @@ section h3 {
 
 .balance-amount {
   font-weight: 700;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 1.2rem;
 }
 
@@ -94,7 +94,7 @@ section h3 {
   background: #fff;
   border: 2px solid #e0e0e0;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .settlement-from,
@@ -127,7 +127,7 @@ section h3 {
   font-weight: 700;
   font-size: 1.3rem;
   color: #4a90d9;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
 }
 
 .arrow {

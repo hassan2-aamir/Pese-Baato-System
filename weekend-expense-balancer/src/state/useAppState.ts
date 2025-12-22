@@ -1,15 +1,17 @@
-import { useReducer, useEffect, useCallback } from 'react';
-import type { AppState, AppAction, ExpenseEvent } from './types';
-import { runCalculation } from '../logic/calculateBalances';
+import { useReducer, useEffect, useCallback } from "react";
+import type { AppState, AppAction, ExpenseEvent } from "./types";
+import { runCalculation } from "../logic/calculateBalances";
 
-const STORAGE_KEY = 'weekend-expense-balancer-state';
+const STORAGE_KEY = "weekend-expense-balancer-state";
 
 function generateId(): string {
   return Math.random().toString(36).substring(2, 9);
 }
 
-function createInitialEntries(participants: AppState['participants']): ExpenseEvent['entries'] {
-  const entries: ExpenseEvent['entries'] = {};
+function createInitialEntries(
+  participants: AppState["participants"]
+): ExpenseEvent["entries"] {
+  const entries: ExpenseEvent["entries"] = {};
   for (const p of participants) {
     entries[p.id] = { expected: 0, actual: 0, included: true };
   }
@@ -20,12 +22,12 @@ const initialState: AppState = {
   participants: [],
   events: [],
   results: null,
-  currentScreen: 'setup',
+  currentScreen: "setup",
 };
 
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
-    case 'ADD_PARTICIPANT': {
+    case "ADD_PARTICIPANT": {
       const newParticipant = { id: generateId(), name: action.name };
       const updatedEvents = state.events.map((event) => ({
         ...event,
@@ -42,7 +44,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
-    case 'REMOVE_PARTICIPANT': {
+    case "REMOVE_PARTICIPANT": {
       const updatedEvents = state.events.map((event) => {
         const { [action.id]: _, ...remainingEntries } = event.entries;
         return { ...event, entries: remainingEntries };
@@ -55,7 +57,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
-    case 'UPDATE_PARTICIPANT': {
+    case "UPDATE_PARTICIPANT": {
       return {
         ...state,
         participants: state.participants.map((p) =>
@@ -65,7 +67,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
-    case 'ADD_EVENT': {
+    case "ADD_EVENT": {
       const newEvent: ExpenseEvent = {
         id: generateId(),
         name: action.name,
@@ -78,7 +80,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
-    case 'REMOVE_EVENT': {
+    case "REMOVE_EVENT": {
       return {
         ...state,
         events: state.events.filter((e) => e.id !== action.id),
@@ -86,7 +88,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
-    case 'UPDATE_EVENT_NAME': {
+    case "UPDATE_EVENT_NAME": {
       return {
         ...state,
         events: state.events.map((e) =>
@@ -96,7 +98,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
-    case 'UPDATE_EVENT_ENTRY': {
+    case "UPDATE_EVENT_ENTRY": {
       return {
         ...state,
         events: state.events.map((e) => {
@@ -116,19 +118,22 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
-    case 'SPLIT_EQUALLY': {
+    case "SPLIT_EQUALLY": {
       return {
         ...state,
         events: state.events.map((e) => {
           if (e.id !== action.eventId) return e;
-          
+
           // Count only included participants
-          const includedCount = Object.values(e.entries).filter(entry => entry.included).length;
+          const includedCount = Object.values(e.entries).filter(
+            (entry) => entry.included
+          ).length;
           if (includedCount === 0) return e;
 
-          const splitAmount = Math.round((action.total / includedCount) * 100) / 100;
+          const splitAmount =
+            Math.round((action.total / includedCount) * 100) / 100;
           const updatedEntries = { ...e.entries };
-          
+
           for (const pid of Object.keys(updatedEntries)) {
             if (updatedEntries[pid].included) {
               updatedEntries[pid] = {
@@ -143,7 +148,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
-    case 'SET_SINGLE_PAYER': {
+    case "SET_SINGLE_PAYER": {
       return {
         ...state,
         events: state.events.map((e) => {
@@ -161,7 +166,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
-    case 'EXCLUDE_PARTICIPANT': {
+    case "EXCLUDE_PARTICIPANT": {
       return {
         ...state,
         events: state.events.map((e) => {
@@ -183,7 +188,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
-    case 'INCLUDE_PARTICIPANT': {
+    case "INCLUDE_PARTICIPANT": {
       // Just resets entry to 0,0 - user can then fill in values
       return {
         ...state,
@@ -193,9 +198,9 @@ function appReducer(state: AppState, action: AppAction): AppState {
             ...e,
             entries: {
               ...e.entries,
-              [action.participantId]: { 
+              [action.participantId]: {
                 ...e.entries[action.participantId],
-                included: true 
+                included: true,
               },
             },
           };
@@ -204,30 +209,30 @@ function appReducer(state: AppState, action: AppAction): AppState {
       };
     }
 
-    case 'CALCULATE': {
+    case "CALCULATE": {
       const results = runCalculation(state);
       return {
         ...state,
         results,
-        currentScreen: 'results',
+        currentScreen: "results",
       };
     }
 
-    case 'CLEAR_RESULTS': {
+    case "CLEAR_RESULTS": {
       return {
         ...state,
         results: null,
       };
     }
 
-    case 'GO_TO_SCREEN': {
+    case "GO_TO_SCREEN": {
       return {
         ...state,
         currentScreen: action.screen,
       };
     }
 
-    case 'LOAD_STATE': {
+    case "LOAD_STATE": {
       return {
         ...state,
         ...action.state,
@@ -248,11 +253,11 @@ function loadFromStorage(): Partial<AppState> | null {
       return {
         participants: parsed.participants || [],
         events: parsed.events || [],
-        currentScreen: parsed.currentScreen || 'setup',
+        currentScreen: parsed.currentScreen || "setup",
       };
     }
   } catch (e) {
-    console.error('Failed to load state from localStorage:', e);
+    console.error("Failed to load state from localStorage:", e);
   }
   return null;
 }
@@ -266,7 +271,7 @@ function saveToStorage(state: AppState): void {
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
   } catch (e) {
-    console.error('Failed to save state to localStorage:', e);
+    console.error("Failed to save state to localStorage:", e);
   }
 }
 
@@ -277,7 +282,7 @@ export function useAppState() {
   useEffect(() => {
     const stored = loadFromStorage();
     if (stored) {
-      dispatch({ type: 'LOAD_STATE', state: stored });
+      dispatch({ type: "LOAD_STATE", state: stored });
     }
   }, []);
 
@@ -289,7 +294,7 @@ export function useAppState() {
   const getParticipantName = useCallback(
     (id: string): string => {
       const participant = state.participants.find((p) => p.id === id);
-      return participant?.name || 'Unknown';
+      return participant?.name || "Unknown";
     },
     [state.participants]
   );

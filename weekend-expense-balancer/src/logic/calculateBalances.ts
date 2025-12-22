@@ -1,4 +1,4 @@
-import type { AppState, CalculationResult } from '../state/types';
+import type { AppState, CalculationResult } from "../state/types";
 
 /**
  * Calculate balance for each participant across all events.
@@ -33,7 +33,9 @@ export function calculateBalances(state: AppState): Record<string, number> {
  * Settle debts using a greedy algorithm.
  * Produces minimal number of transactions.
  */
-export function settleDebts(balances: Record<string, number>): { from: string; to: string; amount: number }[] {
+export function settleDebts(
+  balances: Record<string, number>
+): { from: string; to: string; amount: number }[] {
   const creditors: { pid: string; amount: number }[] = [];
   const debtors: { pid: string; amount: number }[] = [];
 
