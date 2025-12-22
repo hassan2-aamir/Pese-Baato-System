@@ -1,0 +1,262 @@
+.event-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: #f8f9fa;
+  cursor: pointer;
+  user-select: none;
+}
+
+.event-header:hover {
+  background: #f0f1f2;
+}
+
+.event-title-section {
+  flex: 1;
+}
+
+.event-name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.edit-hint {
+  opacity: 0;
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
+}
+
+.event-name:hover .edit-hint {
+  opacity: 0.5;
+}
+
+.event-name-input {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border: 2px solid #4a90d9;
+  border-radius: 4px;
+  outline: none;
+}
+
+.event-summary {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.event-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.collapse-icon {
+  color: #999;
+  font-size: 0.8rem;
+}
+
+.event-body {
+  padding: 1.25rem;
+}
+
+.shortcuts-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.shortcut-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.shortcut-input {
+  width: 120px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.shortcut-select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: #fff;
+}
+
+.entries-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.entries-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.entry-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  align-items: center;
+  background: #fafafa;
+  border-radius: 6px;
+}
+
+.entry-row:hover {
+  background: #f5f5f5;
+}
+
+.col-name {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.include-checkbox {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+.excluded-name {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.entry-row.excluded {
+  opacity: 0.6;
+  background: #f0f0f0;
+}
+
+.amount-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  text-align: right;
+}
+
+.amount-input:focus {
+  border-color: #4a90d9;
+  outline: none;
+}
+
+.amount-input:disabled {
+  background: #e9ecef;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.col-balance {
+  text-align: right;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.col-balance.positive {
+  color: #28a745;
+}
+
+.col-balance.negative {
+  color: #dc3545;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .entries-header {
+    display: none;
+  }
+
+  .entry-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .col-name {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .entry-row .col-expected,
+  .entry-row .col-actual {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .entry-row .col-expected::before {
+    content: 'Expected: ';
+    font-size: 0.8rem;
+    color: #666;
+    min-width: 80px;
+  }
+
+  .entry-row .col-actual::before {
+    content: 'Paid: ';
+    font-size: 0.8rem;
+    color: #666;
+    min-width: 80px;
+  }
+
+  .entry-row .col-balance {
+    text-align: left;
+    padding-top: 0.25rem;
+    border-top: 1px dashed #eee;
+  }
+
+  .entry-row .col-balance::before {
+    content: 'Balance: ';
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: normal;
+  }
+
+  .shortcuts-bar {
+    flex-direction: column;
+  }
+
+  .shortcut-group {
+    width: 100%;
+  }
+
+  .shortcut-input {
+    flex: 1;
+  }
+}

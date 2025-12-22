@@ -1,0 +1,132 @@
+/* App Layout */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background: linear-gradient(135deg, #4a90d9 0%, #357abd 100%);
+  color: white;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.tagline {
+  margin: 0.25rem 0 0 0;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+.app-main {
+  flex: 1;
+  padding: 1.5rem;
+  background: #f5f7fa;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.app-footer p {
+  margin: 0;
+}
+
+/* Global Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #4a90d9;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #357abd;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.btn-success {
+  background: #28a745;
+  color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #218838;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid #ddd;
+  color: #555;
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: #f8f9fa;
+  border-color: #ccc;
+}
+
+.btn-small {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.btn-large {
+  padding: 0.9rem 1.8rem;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .app-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .app-main {
+    padding: 1rem;
+  }
+}

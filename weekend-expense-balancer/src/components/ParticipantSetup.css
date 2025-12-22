@@ -1,0 +1,87 @@
+.participant-setup {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.participant-setup h2 {
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.add-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.name-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.name-input:focus {
+  border-color: #4a90d9;
+}
+
+.participant-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.participant-name {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.participant-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.edit-form {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.edit-input {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 2px solid #4a90d9;
+  border-radius: 4px;
+  outline: none;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  color: #666;
+}
+
+.actions {
+  margin-top: 2rem;
+  text-align: center;
+}
