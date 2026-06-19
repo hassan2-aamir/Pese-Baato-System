@@ -8,12 +8,10 @@ import type { AppState, CalculationResult } from "../state/types";
 export function calculateBalances(state: AppState): Record<string, number> {
   const totals: Record<string, number> = {};
 
-  // Initialize all participants with 0 balance
   for (const p of state.participants) {
     totals[p.id] = 0;
   }
 
-  // Sum up (actual - expected) for each participant across all events
   for (const event of state.events) {
     for (const pid in event.entries) {
       const { expected, actual } = event.entries[pid];
@@ -21,7 +19,6 @@ export function calculateBalances(state: AppState): Record<string, number> {
     }
   }
 
-  // Round to 2 decimal places to avoid floating-point issues
   for (const pid in totals) {
     totals[pid] = Math.round(totals[pid] * 100) / 100;
   }
@@ -30,11 +27,40 @@ export function calculateBalances(state: AppState): Record<string, number> {
 }
 
 /**
+ * Calculate per-event net balance for each participant.
+ * eventBalances[eventId][participantId] = actual - expected
+ */
+export function calculateEventBalances(
+  state: AppState,
+): Record<string, Record<string, number>> {
+  const result: Record<string, Record<string, number>> = {};
+
+  for (const event of state.events) {
+    result[event.id] = {};
+    for (const pid in event.entries) {
+      const { expected, actual, included } = event.entries[pid];
+      if (included) {
+        result[event.id][pid] = Math.round((actual - expected) * 100) / 100;
+      } else {
+        result[event.id][pid] = 0;
+      }
+    }
+    // Ensure all participants appear
+    for (const p of state.participants) {
+      if (!(p.id in result[event.id])) {
+        result[event.id][p.id] = 0;
+      }
+    }
+  }
+
+  return result;
+}
+
+/**
  * Settle debts using a greedy algorithm.
- * Produces minimal number of transactions.
  */
 export function settleDebts(
-  balances: Record<string, number>
+  balances: Record<string, number>,
 ): { from: string; to: string; amount: number }[] {
   const creditors: { pid: string; amount: number }[] = [];
   const debtors: { pid: string; amount: number }[] = [];
@@ -43,11 +69,10 @@ export function settleDebts(
     if (amount > 0.001) {
       creditors.push({ pid, amount });
     } else if (amount < -0.001) {
-      debtors.push({ pid, amount: -amount }); // Store as positive for easier math
+      debtors.push({ pid, amount: -amount });
     }
   }
 
-  // Sort for consistent results (optional but good for UX)
   creditors.sort((a, b) => b.amount - a.amount);
   debtors.sort((a, b) => b.amount - a.amount);
 
@@ -72,7 +97,6 @@ export function settleDebts(
     d.amount -= transfer;
     c.amount -= transfer;
 
-    // Round to avoid floating-point drift
     d.amount = Math.round(d.amount * 100) / 100;
     c.amount = Math.round(c.amount * 100) / 100;
 
@@ -83,11 +107,9 @@ export function settleDebts(
   return settlements;
 }
 
-/**
- * Run the full calculation pipeline.
- */
 export function runCalculation(state: AppState): CalculationResult {
   const balances = calculateBalances(state);
   const settlements = settleDebts(balances);
-  return { balances, settlements };
+  const eventBalances = calculateEventBalances(state);
+  return { balances, settlements, eventBalances };
 }

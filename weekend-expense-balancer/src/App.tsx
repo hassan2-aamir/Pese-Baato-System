@@ -54,6 +54,7 @@ function App() {
           <ResultsView
             results={state.results}
             participants={state.participants}
+            events={state.events}
             dispatch={dispatch}
             getParticipantName={getParticipantName}
             onBack={goBackToEvents}

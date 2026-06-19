@@ -9,11 +9,11 @@ function generateId(): string {
 }
 
 function createInitialEntries(
-  participants: AppState["participants"]
+  participants: AppState["participants"],
 ): ExpenseEvent["entries"] {
   const entries: ExpenseEvent["entries"] = {};
   for (const p of participants) {
-    entries[p.id] = { expected: 0, actual: 0, included: true };
+    entries[p.id] = { expected: 0, actual: 0, included: true, lineItems: [] };
   }
   return entries;
 }
@@ -25,6 +25,10 @@ const initialState: AppState = {
   currentScreen: "setup",
 };
 
+function sumLineItems(lineItems: { amount: number }[]): number {
+  return lineItems.reduce((s, li) => s + li.amount, 0);
+}
+
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case "ADD_PARTICIPANT": {
@@ -33,7 +37,12 @@ function appReducer(state: AppState, action: AppAction): AppState {
         ...event,
         entries: {
           ...event.entries,
-          [newParticipant.id]: { expected: 0, actual: 0, included: true },
+          [newParticipant.id]: {
+            expected: 0,
+            actual: 0,
+            included: true,
+            lineItems: [],
+          },
         },
       }));
       return {
@@ -61,7 +70,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         participants: state.participants.map((p) =>
-          p.id === action.id ? { ...p, name: action.name } : p
+          p.id === action.id ? { ...p, name: action.name } : p,
         ),
         results: null,
       };
@@ -92,7 +101,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         events: state.events.map((e) =>
-          e.id === action.id ? { ...e, name: action.name } : e
+          e.id === action.id ? { ...e, name: action.name } : e,
         ),
         results: null,
       };
@@ -110,6 +119,88 @@ function appReducer(state: AppState, action: AppAction): AppState {
               [action.participantId]: {
                 ...e.entries[action.participantId],
                 [action.field]: action.value,
+                // If manually editing expected, clear line items
+                ...(action.field === "expected" ? { lineItems: [] } : {}),
+              },
+            },
+          };
+        }),
+        results: null,
+      };
+    }
+
+    case "ADD_LINE_ITEM": {
+      return {
+        ...state,
+        events: state.events.map((e) => {
+          if (e.id !== action.eventId) return e;
+          const entry = e.entries[action.participantId];
+          const newLineItem = {
+            id: generateId(),
+            label: action.label,
+            amount: action.amount,
+          };
+          const newLineItems = [...(entry.lineItems || []), newLineItem];
+          return {
+            ...e,
+            entries: {
+              ...e.entries,
+              [action.participantId]: {
+                ...entry,
+                lineItems: newLineItems,
+                expected: Math.round(sumLineItems(newLineItems) * 100) / 100,
+              },
+            },
+          };
+        }),
+        results: null,
+      };
+    }
+
+    case "REMOVE_LINE_ITEM": {
+      return {
+        ...state,
+        events: state.events.map((e) => {
+          if (e.id !== action.eventId) return e;
+          const entry = e.entries[action.participantId];
+          const newLineItems = (entry.lineItems || []).filter(
+            (li) => li.id !== action.lineItemId,
+          );
+          return {
+            ...e,
+            entries: {
+              ...e.entries,
+              [action.participantId]: {
+                ...entry,
+                lineItems: newLineItems,
+                expected: Math.round(sumLineItems(newLineItems) * 100) / 100,
+              },
+            },
+          };
+        }),
+        results: null,
+      };
+    }
+
+    case "UPDATE_LINE_ITEM": {
+      return {
+        ...state,
+        events: state.events.map((e) => {
+          if (e.id !== action.eventId) return e;
+          const entry = e.entries[action.participantId];
+          const newLineItems = (entry.lineItems || []).map((li) =>
+            li.id === action.lineItemId
+              ? { ...li, label: action.label, amount: action.amount }
+              : li,
+          );
+          return {
+            ...e,
+            entries: {
+              ...e.entries,
+              [action.participantId]: {
+                ...entry,
+                lineItems: newLineItems,
+                expected: Math.round(sumLineItems(newLineItems) * 100) / 100,
               },
             },
           };
@@ -124,9 +215,8 @@ function appReducer(state: AppState, action: AppAction): AppState {
         events: state.events.map((e) => {
           if (e.id !== action.eventId) return e;
 
-          // Count only included participants
           const includedCount = Object.values(e.entries).filter(
-            (entry) => entry.included
+            (entry) => entry.included,
           ).length;
           if (includedCount === 0) return e;
 
@@ -139,6 +229,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
               updatedEntries[pid] = {
                 ...updatedEntries[pid],
                 expected: splitAmount,
+                lineItems: [], // clear line items when splitting equally
               };
             }
           }
@@ -180,6 +271,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
                 expected: 0,
                 actual: 0,
                 included: false,
+                lineItems: [],
               },
             },
           };
@@ -189,7 +281,6 @@ function appReducer(state: AppState, action: AppAction): AppState {
     }
 
     case "INCLUDE_PARTICIPANT": {
-      // Just resets entry to 0,0 - user can then fill in values
       return {
         ...state,
         events: state.events.map((e) => {
@@ -233,10 +324,21 @@ function appReducer(state: AppState, action: AppAction): AppState {
     }
 
     case "LOAD_STATE": {
+      // Migrate old data: ensure lineItems exists on all entries
+      const migratedEvents = (action.state.events || []).map((event) => ({
+        ...event,
+        entries: Object.fromEntries(
+          Object.entries(event.entries).map(([pid, entry]) => [
+            pid,
+            { lineItems: [], ...entry },
+          ]),
+        ),
+      }));
       return {
         ...state,
         ...action.state,
-        results: null, // Never restore results
+        events: migratedEvents,
+        results: null,
       };
     }
 
@@ -278,7 +380,6 @@ function saveToStorage(state: AppState): void {
 export function useAppState() {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
-  // Load from localStorage on mount
   useEffect(() => {
     const stored = loadFromStorage();
     if (stored) {
@@ -286,7 +387,6 @@ export function useAppState() {
     }
   }, []);
 
-  // Save to localStorage on state change
   useEffect(() => {
     saveToStorage(state);
   }, [state.participants, state.events, state.currentScreen]);
@@ -296,7 +396,7 @@ export function useAppState() {
       const participant = state.participants.find((p) => p.id === id);
       return participant?.name || "Unknown";
     },
-    [state.participants]
+    [state.participants],
   );
 
   return { state, dispatch, getParticipantName };

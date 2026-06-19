@@ -1,5 +1,5 @@
 .results-view {
-  max-width: 700px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -28,6 +28,14 @@ section h3 {
   color: #666;
   font-size: 0.9rem;
   margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.positive-legend {
+  color: #155724;
+}
+.negative-legend {
+  color: #721c24;
 }
 
 /* Balances */
@@ -74,7 +82,6 @@ section h3 {
 .positive .balance-amount {
   color: #155724;
 }
-
 .negative .balance-amount {
   color: #721c24;
 }
@@ -148,11 +155,261 @@ section h3 {
   color: #155724;
 }
 
+/* ── BALANCE SHEET ── */
+.balance-sheet-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.balance-sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  min-width: 400px;
+}
+
+.balance-sheet-table th {
+  background: #2c3e50;
+  color: #fff;
+  padding: 0.65rem 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  font-size: 0.82rem;
+  letter-spacing: 0.3px;
+}
+
+.balance-sheet-table th.bs-col-name {
+  text-align: left;
+  min-width: 110px;
+}
+
+.balance-sheet-table th.bs-col-total {
+  background: #1a252f;
+}
+
+.bs-cell-name {
+  padding: 0.6rem 0.9rem;
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+  background: #f9f9f9;
+}
+
+.bs-cell-amount {
+  padding: 0.6rem 0.9rem;
+  text-align: center;
+  font-family: "Courier New", monospace;
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.bs-positive {
+  color: #155724;
+  background: #f0faf3;
+}
+
+.bs-negative {
+  color: #721c24;
+  background: #fdf2f3;
+}
+
+.bs-zero {
+  color: #999;
+  background: #fff;
+}
+
+.bs-total-col {
+  border-left: 2px solid #2c3e50;
+  background: #f5f7fa !important;
+}
+
+.bs-footer-row {
+  background: #2c3e50;
+}
+
+.bs-footer-label {
+  background: #2c3e50;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.3px;
+}
+
+.bs-footer-sum {
+  background: #34495e;
+  color: #a8f5b0;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.6rem 0.9rem;
+  font-family: "Courier New", monospace;
+  border-left: 1px solid #4a6278;
+}
+
+.bs-legend {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* ── RECEIPTS ── */
+.receipts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.receipt-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #2c3e50;
+  color: #fff;
+}
+
+.receipt-name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.receipt-net {
+  font-weight: 700;
+  font-family: "Courier New", monospace;
+  font-size: 0.95rem;
+}
+
+.receipt-net.positive {
+  color: #a8f5b0;
+}
+.receipt-net.negative {
+  color: #ffb3b3;
+}
+
+.receipt-body {
+  padding: 0.75rem 1rem;
+}
+
+.receipt-event {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed #eee;
+}
+
+.receipt-event:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.receipt-event-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #444;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.receipt-items {
+  margin-bottom: 0.3rem;
+}
+
+.receipt-item-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #555;
+  padding: 0.15rem 0;
+}
+
+.ri-label {
+  flex: 1;
+}
+.ri-amount {
+  font-weight: 500;
+}
+
+.receipt-event-subtotal {
+  border-top: 1px solid #eee;
+  margin-top: 0.25rem;
+  padding-top: 0.25rem;
+}
+
+.res-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #666;
+  padding: 0.1rem 0;
+}
+
+.res-net {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.res-net.positive {
+  color: #155724;
+}
+.res-net.negative {
+  color: #721c24;
+}
+
+.receipt-footer {
+  padding: 0.75rem 1rem;
+  background: #f8f9fa;
+  border-top: 1px solid #eee;
+}
+
+.receipt-totals {
+  margin-bottom: 0.5rem;
+}
+
+.rt-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.receipt-verdict {
+  text-align: center;
+  font-weight: 700;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.verdict-positive {
+  background: #d4edda;
+  color: #155724;
+}
+
+.verdict-negative {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.verdict-neutral {
+  background: #e9ecef;
+  color: #495057;
+}
+
 /* Summary */
 .summary-stats {
   display: flex;
   gap: 1rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .stat {
@@ -190,16 +447,97 @@ section h3 {
   min-width: 200px;
 }
 
-/* Print styles */
+/* ── PRINT STYLES ── */
 @media print {
-  .results-header button,
-  .results-actions {
+  .no-print {
     display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
   }
 
   .results-view {
     max-width: 100%;
+    padding: 0;
   }
+
+  .print-document {
+    padding: 0;
+  }
+
+  .print-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #2c3e50;
+  }
+
+  .print-title h1 {
+    margin: 0 0 0.25rem;
+    font-size: 1.6rem;
+    color: #2c3e50;
+  }
+
+  .print-date {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .balance-sheet-table th {
+    background: #2c3e50 !important;
+    color: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bs-footer-row,
+  .bs-footer-label,
+  .bs-footer-sum {
+    background: #2c3e50 !important;
+    color: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bs-footer-sum {
+    color: #a8f5b0 !important;
+  }
+
+  .bs-positive {
+    background: #f0faf3 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .bs-negative {
+    background: #fdf2f3 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .receipt-header {
+    background: #2c3e50 !important;
+    color: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .receipts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  section {
+    break-inside: avoid;
+  }
+
+  .receipt-card {
+    break-inside: avoid;
+  }
+}
+
+.print-only {
+  display: none;
 }
 
 /* Mobile */
@@ -243,5 +581,9 @@ section h3 {
 
   .results-actions .btn {
     width: 100%;
+  }
+
+  .receipts-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -5,10 +5,17 @@ export interface Participant {
   name: string;
 }
 
+export interface LineItem {
+  id: string;
+  label: string;
+  amount: number;
+}
+
 export interface EventEntry {
   expected: number;
   actual: number;
   included: boolean;
+  lineItems: LineItem[]; // itemized breakdown of expected amount
 }
 
 export interface ExpenseEvent {
@@ -26,6 +33,8 @@ export interface Settlement {
 export interface CalculationResult {
   balances: Record<string, number>;
   settlements: Settlement[];
+  // per-event net for each participant: eventBalances[eventId][participantId] = actual - expected
+  eventBalances: Record<string, Record<string, number>>;
 }
 
 export interface AppState {
@@ -58,6 +67,27 @@ export type AppAction =
     }
   | { type: "EXCLUDE_PARTICIPANT"; eventId: string; participantId: string }
   | { type: "INCLUDE_PARTICIPANT"; eventId: string; participantId: string }
+  | {
+      type: "ADD_LINE_ITEM";
+      eventId: string;
+      participantId: string;
+      label: string;
+      amount: number;
+    }
+  | {
+      type: "REMOVE_LINE_ITEM";
+      eventId: string;
+      participantId: string;
+      lineItemId: string;
+    }
+  | {
+      type: "UPDATE_LINE_ITEM";
+      eventId: string;
+      participantId: string;
+      lineItemId: string;
+      label: string;
+      amount: number;
+    }
   | { type: "CALCULATE" }
   | { type: "CLEAR_RESULTS" }
   | { type: "GO_TO_SCREEN"; screen: "setup" | "events" | "results" }
